@@ -34,3 +34,13 @@ set shiftwidth=2
 " source $VIMRUNTIME/macros/matchit.vim
 
 autocmd FileType * set formatoptions-=ro
+
+" バッファを保存しなくても他のバッファを表示できるようにする
+set hidden
+
+" コマンドライン補完を便利に
+set wildmenu
+
+set showcmd
+set backspace=indent,eol,start
+set laststatus=2
