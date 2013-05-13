@@ -34,18 +34,24 @@ function delthis {
   delbr $brname
 }
 alias delbrr="git push origin"
+alias deltag="git tag -d"
 alias switch="git checkout"
 #alias rmco="git checkout -b"
 alias remote="git remote"
 alias remotes="git remote -v"
 alias reset="git reset"
-alias hardreset="git reset --hard"
+alias resethard="git reset --hard"
+alias reset^="reset --hard HEAD^"
 alias gitcp="git cherry-pick"
 alias gpick="git cherry-pick"
 alias gcp="git cherry-pick"
 alias cpick="git cherry-pick"
 alias status="git status"
 alias stat="git status"
+alias stash="git stash"
+alias pop="git stash pop"
+alias gs="git show"
+alias show="git show"
 #alias sw="git checkout"
 
 function curbr {
