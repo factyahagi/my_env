@@ -1,0 +1,5 @@
+# Github
+function githubtime_from_jst {
+  date -d "$* 17 hours"
+}
+alias ght=githubtime_from_jst

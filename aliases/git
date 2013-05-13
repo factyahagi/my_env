@@ -3,13 +3,14 @@
 #alias push="git push"
 #alias pull="git pull"
 function update_br_ps1 {
-	cur_br=$(git branch -a 2>/dev/null | grep "^*" | tr -d '\* ')
-	#PS1="\[\033[0;32m\][\[\033[0;31m\]$cur_br \[\033[0;32m\]\W]$ "
-	#PS1="\[\033[0;32m\][\[\033[0;31m\]$cur_br \033[0m\]\W]$ "
-	PS1="\[\033[0;32m\][\[\033[0;31m\]$cur_br \033[0m\]\W]\[\033[0;32m\]$ \033[0m\]"
+  cur_br=$(git branch -a 2>/dev/null | grep "^*" | tr -d '\* ')
+  #PS1="\[\033[0;32m\][\[\033[0;31m\]$cur_br \[\033[0;32m\]\W]$ "
+  #PS1="\[\033[0;32m\][\[\033[0;31m\]$cur_br \033[0m\]\W]$ "
+  PS1="\[\033[0;32m\][\[\033[0;31m\]$cur_br \033[0m\]\W]\[\033[0;32m\]$ \033[0m\]"
 }
 alias add="git add"
 #alias revert="git checkout"
+alias back="git checkout HEAD^"
 function revert {
   git checkout $*
   git reset $*
@@ -28,9 +29,7 @@ alias delbr="br -D"
 function delthis {
   brname=`curbr`
   echo "Delete Branch $brname!"
-  #echo "You Want DELETE Branch $brname reary? (y/n)"
-  #read yn
-  swdev
+  sw develop
   delbr $brname
 }
 alias delbrr="git push origin"
@@ -55,18 +54,18 @@ alias show="git show"
 #alias sw="git checkout"
 
 function curbr {
-	echo $(git branch -a 2>/dev/null | grep "^*" | tr -d '\* ')
+  echo $(git branch -a 2>/dev/null | grep "^*" | tr -d '\* ')
 }
 
 alias bu="br; update_br_ps1"
 function sw {
-	switch $*
-	update_br_ps1
+  switch $*
+  update_br_ps1
 }
 alias ch="sw";
 function brsw {
   br $*
-	sw $*
+  sw $*
 }
 function reco
 {
@@ -74,24 +73,32 @@ function reco
   delthis
   rmco $brname
 }
-function extag
+function totag
 {
-  git tag $* $*
-  delbr $*
+  #git tag $* $*
+  #delbr $*
+  for name in "$*"; do
+    git tag $name $name
+    delbr $name
+  done
 }
-alias totag="extag"
 alias tag="git tag"
-alias tags="git tag | more"
+alias tags="git tag | less"
 
 alias fetch="git fetch"
-alias swdev="sw develop; br"
-alias swd="swdev"
+#alias swdev="sw develop; br"
 alias swdev="sw develop"
+alias swmas="sw master"
+alias swmast="sw master"
+alias swmaster="sw master"
+alias devpull="swdev; pull"
 alias reb="git rebase upstream/develop"
+alias rebi="git rebase -i"
 alias rebase="git rebase"
 alias rebcon="git rebase --continue"
 alias rebab="git rebase --abort"
 alias rebabo="git rebase --abort"
+alias rebdev="git rebase -i develop"
 alias log1="git log --graph"
 #alias graph2="git log --graph --pretty=oneline"
 alias log2="git wtf"
@@ -102,12 +109,14 @@ alias diff="git diff --cached"
 alias devdiff="git diff develop..HEAD"
 alias curdiff="git diff --cached"
 alias diff^="git diff HEAD^"
+alias diff^^="git diff HEAD^^"
+alias diff^^^="git diff HEAD^^^"
 alias ours="git checkout --ours"
+alias mine="git checkout --ours"
 alias theirs="git checkout --theirs"
 
 #alias pull="switch develop; git fetch upstream; git pull"
 alias pull="git pull"
-#alias pull="pull3"
 alias devpull="switch develop; git fetch upstream; git pull"
 alias lpull="git pull"
 alias upstream="switch develop; git fetch upstream; git pull; rake db:migrate"
@@ -122,6 +131,9 @@ function rmbr {
 }
 alias rnbr="rmbr"
 
+
+alias set_upstream="git branch --set-upstream"
+alias setups="git branch --set-upstream"
 #alias push="echo `curbr`; git push origin `curbr`"
 function push_ {
   curbr_=`curbr`
@@ -131,40 +143,34 @@ function push_ {
 alias push="git push"
 
 function rmco_ {
-  fetch
+  echo "fetching..."
+  git fetch
   git checkout -b $1 origin/$1
   br
 }
 alias rmco="rmco_"
 
 function dbr {
-	br_name="dirty/$1_$2"
-	br $br_name
-	echo "Created $br_name"
-	switch $br_name
-	br
+  br_name="dirty/$1_$2"
+  br $br_name
+  echo "Created $br_name"
+  switch $br_name
+  br
 }
 
 function fbr {
-	br_name="feature/$1_$2"
-	br $br_name
-	echo "Created $br_name"
-	switch $br_name
-	br
+  br_name="feature/$1_$2"
+  br $br_name
+  echo "Created $br_name"
+  switch $br_name
+  br
 }
 alias brf="fbr"
 
 function sbr {
-	br_name="spike/$1_$2"
-	br $br_name
-	echo "Created $br_name"
-	switch $br_name
-	br
+  br_name="spike/$1_$2"
+  br $br_name
+  echo "Created $br_name"
+  switch $br_name
+  br
 }
-
-# Github
-function githubtime_from_jst {
-  date -d "$* 17 hours"
-}
-alias ght=githubtime_from_jst
-
